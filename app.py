@@ -15,4 +15,10 @@ def query():
         return returnFlexibleDate(content)
     else:
         return returnFixDate(content)
+
+@app.route("/chatQuery", methods = ['POST'])
+def chatQuery():
+    content = request.get_json()
+    print(content)
+    return "done"
         

@@ -34,10 +34,10 @@
   <header class="main-header">
     <!-- Logo -->
     <a href="index2.html" class="logo">
-     <!-- mini logo for sidebar mini 50x50 pixels -->
-     <span class="logo-mini"><b>ZZ</b></span>
-     <!-- logo for regular state and mobile devices -->
-     <span class="logo-lg"><b>Zing Zing</span>
+      <!-- mini logo for sidebar mini 50x50 pixels -->
+      <span class="logo-mini"><b>ES</b></span>
+      <!-- logo for regular state and mobile devices -->
+      <span class="logo-lg"><b>Exspeedia</span>
     </a>
     <!-- Header Navbar: style can be found in header.less -->
     <nav class="navbar navbar-static-top">
@@ -105,22 +105,21 @@
   <aside class="main-sidebar">
     <!-- sidebar: style can be found in sidebar.less -->
     <section class="sidebar">
-      <!-- /.search form -->
-      <!-- sidebar menu: : style can be found in sidebar.less -->
-      <ul class="sidebar-menu" data-widget="tree" id="">
-        <li class="active treeview">
-          <a href="#">
-            <i class="fa fa-pie-chart"></i>
-            <span>Index</span>
-          </a>
-        </li>
-        <li class="treeview">
-          <a href="#">
-            <i class="fa fa-pie-chart"></i>
-            <span>Chat</span>
-          </a>
-        </li>
-      </ul>
+      <!-- Sidebar user panel -->
+      <div class="user-panel">
+        <div class="pull-left image">
+          <img src="../../dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+        </div>
+        <div class="pull-left info">
+          <p>Alexander Pierce</p>
+          <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+        </div>
+      </div>
+      <div class="col-xs-12">
+        <div>
+
+        </div>
+      </div>
     </section>
     <!-- /.sidebar -->
   </aside>
@@ -146,7 +145,7 @@
             <!-- timeline time label -->
             <li class="time-label">
                   <span class="bg-red">
-                    22 July. 2018
+                    8 Dec. 2018
                   </span>
             </li>
             <!-- /.timeline-label -->
@@ -378,17 +377,22 @@
     addResponseElement(responseText);
     
     if(state == 1) {
-      information['policeReport'] = responseText;
-      addQuestionElement('The current price of BTC/USD is $7,444.98. What else I can help you?');
+      information['answer1'] = responseText;
+      addQuestionElement('how many room do you looking for?');
     }
     else if(state == 2) {
-      information['reportNumber'] = responseText;
-      addQuestionElement('The health of BTC/USD is Green. What else I can help you?');
+      information['answer2'] = responseText;
+      addQuestionElement('do you flixible on the date?');
     }
     else if(state == 3) {
-      information['yourLoss'] = responseText;
-      addResponseElement('I have sent your order to the ETHFinex.');
-      addResponseElement('You order has been place. Please check your order in https://ethfinex.com');
+      information['answer3'] = responseText;
+      addQuestionElement('We found the cheapest room of $39! do you want to book it now?', true);
+    }
+    else if(state == 4) {
+      postDataData();
+      information['answer4'] = responseText;
+      addResponseElement('By booking with us, you have saved $40 today.');
+      addResponseElement('Click to payment <a href="#" class="alert-link">click to payment</a>');
     }
     if (state < 3) addInputElement();
     state++;
@@ -454,6 +458,19 @@
   }
   addQuestionElement('Hi, how can I help you today?');
   addInputElement();
+
+  const postDataData = () => {
+      $.ajax({
+          type: "POST",
+          url: '/chatQuery',
+          dataType: 'json',
+          contentType: 'application/json',
+          data: JSON.stringify(information),
+          success: function (data) {
+            updateTable(data);
+          }
+      });
+  };
 </script>
 
 <!-- jQuery 3 -->

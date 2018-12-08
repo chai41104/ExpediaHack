@@ -1,0 +1,161 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <title>NAME_HERE</title>
+    <style type="text/css">
+        .hidden{
+            display:none;
+        }
+        #problem{
+            color: #BB0000;
+            font-weight: bold;
+        }
+    </style>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://checkout.stripe.com/v2/checkout.js"></script>
+    <script type="text/javascript">
+        var PRICE = 2500;
+
+        function disableForm(){
+            $(".form").prop("disabled", true);
+        }
+
+        function enableForm(){
+            $(".form").prop("disabled", false);
+        }
+
+        function americanize(date){
+            var initial = date.split(/-/);
+            return( [ initial[1], initial[2], initial[0] ].join('\/'));
+        }
+
+        function uppercaseFirst(string)
+        {
+            return string.charAt(0).toUpperCase() + string.slice(1);
+        }
+
+        function attemptBook(city, date, days, contactNumber){
+            $.ajax({
+                url: "/v1/requestBooking?city=" + city + "&date=" + date + "&days=" + days + "&contactNumber=" + contactNumber
+            }).done(function(response){
+                // Pass back response.confirmation with payment proof.
+                var stripeConfirm = function(stripeResponse){
+                    $.ajax({
+                        url:"/v1/confirmBooking?confirm=" + response.confirmation + "&pay=" + stripeResponse.id
+                            + "&price=" + PRICE
+                    }).done(function(confirmation){
+                        $('#start').fadeOut(function(){
+                            $('#confirmedTitle').text(
+                                "You're going to " + uppercaseFirst(city.toLowerCase()) + "!"
+                            );
+                            $('#confirmedReference').text("Reference: " + confirmation.id);
+                            $('#demo').prop("href","/demo/allocate?date=" + date);
+                            $('#confirmed').fadeIn();
+                        })
+                    }).fail(function(problem){
+                        $('#problem').text(problem).fadeIn();
+                    })
+                }
+                StripeCheckout.open({
+                    key:         'pk_test_JriG3GnYNBw7gR59RMdRlrlP',
+                    address:     false,
+                    amount:      PRICE,
+                    currency:    'gbp',
+                    name:        'Snap',
+                    description: 'Snap booking for ' + uppercaseFirst(city.toLowerCase()),
+                    panelLabel:  'Checkout',
+                    token:       stripeConfirm
+                });
+            }).fail(function(response){
+                $('#problem').text(response.responseText).fadeIn();
+            })
+        }
+
+        function extractAndAttemptBook(){
+            city = $("#city").val();
+            date = americanize($("#date").val());
+            days = $("#nights").val();
+            phone = $("#phone").val();
+            attemptBook(
+                city,
+                date,
+                days,
+                phone
+            );
+        }
+
+        $(function(){
+            $('#city').change(function(){
+                var value = $(this).val();
+                $.ajax({
+                    url: "/v1/canBook?city=" + value
+                }).done(function(response){
+                    if (!response.canBook){
+                        disableForm();
+                        $('#problem').text(
+                            "Sorry! All our rooms in that city are booked right now!"
+                        ).fadeIn();
+                    }
+                    else{
+                        $('#cost').text(
+                            response.cost
+                        );
+                        PRICE = response.price;
+                    }
+                });
+            }).trigger("change");
+
+            // attemptBook(
+            //     'london',
+            //     '08/12/2018',
+            //     '4',
+            //     '07873124771'
+            // );
+        })
+    </script>
+    <style type="text/css" >
+        @import url('https://fonts.googleapis.com/css?family=Open+Sans');
+        body{
+            background-color:#00355f;
+            color:#ffffff;
+            font-family: 'Open Sans', sans-serif;
+        }
+    </style>
+</head>
+<body>
+<div id="start" ><center>
+    <h3> Choose a date for your stay, and 48 hours before this date we will confirm your booking with hotel and room number.</h3>
+    <p id="problem" class="hidden"></p>
+    <label for="city">City: </label>
+    <select id="city" required>
+        <option value="LONDON">London</option>
+        <option value="PARIS">Paris</option>
+    </select>
+    <br/><br/>
+    <label for="date">Check in date: </label>
+    <input type="date" class="form" id="date" required/>
+    <br/><br/>
+    <label for="nights">Staying for:</label>
+    <input id="nights" type="number" class="form" min="1" required/> nights
+    <br/><br/>
+    <label for="phone">Contact number for booking information:</label>
+    <input id="phone" type="tel" class="form" required/>
+    <br/><br/>
+    Cost: <b id="cost"></b>
+    <br/><br/>
+    <button onclick="extractAndAttemptBook()">Book!</button>
+</div>
+<div id="confirmed" class="hidden" style = "background-color:#00355f">
+    style = "background-color:#00355f"
+    <center>
+        <h1 id="confirmedTitle"></h1>
+        <p id="confirmedReference"></p>
+        <br/><br/><br/>
+        <b><a target="_blank" id="demo" href="/demo/allocate?date=">DEMO: Force allocate this room now with test data</a></b>
+    </center>
+</div>
+</body>
+</html>

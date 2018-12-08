@@ -140,85 +140,112 @@
             <div class="row">
                 <div class="col-xs-12">
                     <div class="box">
-                    <div class="box-header">
-                        <h3 class="box-title">Plan your journey</h3>
-                        <div class="box-tools">
-                        <div class="input-group input-group-sm" style="width: 150px;">
-                        </div>
-                        </div>
-                    </div>
-                    <!-- /.box-header -->
-                    <div class="box-body table-responsive">
-                        <div class="col-xs-3">
-                            <div class="form-group">
-                                <label>Your destination</label>
-                                <select class="form-control select2" style="width: 100%;">
-                                    <option selected="selected">Alabama</option>
-                                    <option>Alaska</option>
-                                    <option>California</option>
-                                    <option>Delaware</option>
-                                    <option>Tennessee</option>
-                                    <option>Texas</option>
-                                    <option>Washington</option>
-                                </select>
+                        <div class="box-header">
+                            <h3 class="box-title">Plan your journey</h3>
+                            <div class="box-tools">
+                            <div class="input-group input-group-sm" style="width: 150px;">
+                            </div>
                             </div>
                         </div>
-                        <div class="col-xs-3">
-                            <div class="form-group">
-                                <label>Check-in and Check-out</label>
-                                <input type="text" class="form-control pull-right" id="reservation">
+                        <!-- /.box-header -->
+                        <div class="box-body table-responsive">
+                            <div class="col-xs-3">
+                                <div class="form-group">
+                                    <label>Your destination</label>
+                                    <select id="location" class="form-control select2" style="width: 100%;">
+                                        <option selected="selected">Alabama</option>
+                                        <option>Alaska</option>
+                                        <option>California</option>
+                                        <option>Delaware</option>
+                                        <option>Tennessee</option>
+                                        <option>Texas</option>
+                                        <option>Washington</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-xs-3">
+                                <div class="form-group">
+                                    <label>Check-in and Check-out</label>
+                                    <input type="text" class="form-control pull-right" id="reservation">
+                                </div>
+                            </div>
+                            <div class="col-xs-1">
+                                <div class="form-group">
+                                    <label>Guest</label>
+                                    <select id="guest" class="form-control guest" style="width: 100%;">
+                                        <option selected="selected">1</option>
+                                        <option>2</option>
+                                        <option>3</option>
+                                        <option>4</option>
+                                        <option>5</option>
+                                        <option>6</option>
+                                        <option>7</option>
+                                        <option>8</option>
+                                        <option>9</option>
+                                        <option>10</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-xs-1">
+                                <div class="form-group">
+                                    <label>Room</label>
+                                    <select id="room" class="form-control room" style="width: 100%;">
+                                        <option selected="selected">1</option>
+                                        <option>2</option>
+                                        <option>3</option>
+                                        <option>4</option>
+                                        <option>5</option>
+                                        <option>6</option>
+                                        <option>7</option>
+                                        <option>8</option>
+                                        <option>9</option>
+                                        <option>10</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-xs-1">
+                                <div class="form-group">
+                                    <label>Flexible</label>
+                                    <input id="flexible" type="checkbox" class="flat-red">
+                                </div>
+                            </div>
+                            <div class="col-xs-1">
+                                <div class="form-group">
+                                    <label></label>
+                                    <button onclick="searchFunc()" class="btn btn-block btn-warning btn-xs">Search</button>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-xs-1">
-                            <div class="form-group">
-                                <label>Guest</label>
-                                <select class="form-control guest" style="width: 100%;">
-                                    <option selected="selected">1</option>
-                                    <option>2</option>
-                                    <option>3</option>
-                                    <option>4</option>
-                                    <option>5</option>
-                                    <option>6</option>
-                                    <option>7</option>
-                                    <option>8</option>
-                                    <option>9</option>
-                                    <option>10</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-xs-1">
-                            <div class="form-group">
-                                <label>Room</label>
-                                <select class="form-control room" style="width: 100%;">
-                                    <option selected="selected">1</option>
-                                    <option>2</option>
-                                    <option>3</option>
-                                    <option>4</option>
-                                    <option>5</option>
-                                    <option>6</option>
-                                    <option>7</option>
-                                    <option>8</option>
-                                    <option>9</option>
-                                    <option>10</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-xs-1">
-                            <div class="form-group">
-                                <label>Flexible</label>
-                                <input type="checkbox" class="flat-red">
-                            </div>
-                        </div>
-                        <div class="col-xs-1">
-                            <div class="form-group">
-                                <label></label>
-                                <button type="button" class="btn btn-block btn-warning btn-xs">Search</button>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- /.box-body -->
+                        <!-- /.box-body -->
                     </div>
                     <!-- /.box -->
+                    <div class="box">
+                        <div class="box-header">
+                            <h3 class="box-title">Plan your journey</h3>
+                            <div class="box-tools">
+                            <div class="input-group input-group-sm" style="width: 150px;">
+                            </div>
+                            </div>
+                        </div>
+                        <!-- /.box-header -->
+                        <div class="box-body table-responsive">
+                            <div class="small-box bg-aqua">
+                                <div class="inner">
+                                    <h3>150</h3>
+                    
+                                    <p>New Orders</p>
+                                </div>
+                                <div class="icon">
+                                    <i class="fa fa-shopping-cart"></i>
+                                </div>
+                                <a href="#" class="small-box-footer">
+                                    More info <i class="fa fa-arrow-circle-right"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <!-- /.box-body -->
+                    </div>
+                    <!-- /.box -->    
                 </div>
             </div>
       </div>
@@ -437,6 +464,24 @@
 <script src="../../bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
 <!-- page script -->
 <script>
+
+    const searchFunc = () => {
+        const location = $('#location').val();
+        const guest = $('#guest').val();
+        const room = $('#room').val();
+        const reservation = $('#reservation').val();
+        const flexible = $('#flexible')[0].checked;
+        const requestData = JSON.stringify({location, guest, room, reservation, flexible});
+        $.ajax({
+            type: "POST",
+            url: '/query',
+            dataType: 'json',
+            contentType: 'application/json',
+            data: requestData,
+            success: function (data) {
+            }
+        })
+    };
 
     $(function () {
         //Initialize Select2 Elements

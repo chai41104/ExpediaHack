@@ -28,6 +28,8 @@
   <link rel="stylesheet" href="../../bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css">
   <!-- daterange picker -->
   <link rel="stylesheet" href="../../bower_components/bootstrap-daterangepicker/daterangepicker.css">
+  <!-- DataTables -->
+  <link rel="stylesheet" href="../../bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css">
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
   <!--[if lt IE 9]>
@@ -45,9 +47,9 @@
     <!-- Logo -->
     <a href="../../index2.html" class="logo">
       <!-- mini logo for sidebar mini 50x50 pixels -->
-      <span class="logo-mini"><b>ZZ</b></span>
+      <span class="logo-mini"><b>ES</b></span>
       <!-- logo for regular state and mobile devices -->
-      <span class="logo-lg"><b>Zing Zing</span>
+      <span class="logo-lg"><b>Exspeedia</span>
     </a>
     <!-- Header Navbar: style can be found in header.less -->
     <nav class="navbar navbar-static-top">
@@ -110,21 +112,11 @@
           <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
         </div>
       </div>
-      <!-- sidebar menu: : style can be found in sidebar.less -->
-      <ul class="sidebar-menu" data-widget="tree">
-        <li class="header">Current Risk Profile</li>
-        <li><a href="#" class="text-red" id='risk_status'> Red </a></li>
-        <li class="header">Select your risk profile</li>
-        <li><a href="javascript:updateRisk('Red');"><i class="fa fa-circle-o text-red"></i> <span>Red</span></a></li>
-        <li><a href="javascript:updateRisk('Amber');"><i class="fa fa-circle-o text-yellow"></i> <span>Amber</span></a></li>
-        <li><a href="javascript:updateRisk('Green');"><i class="fa fa-circle-o text-green"></i> <span>Green</span></a></li>
-        <li class="header">MAIN NAVIGATION</li>
-        <li class="treeview">
-          <a href="#">
-            <i class="fa fa-dashboard"></i> <span>Dashboard</span>
-          </a>
-        </li>
-      </ul>
+      <div class="col-xs-12">
+        <div>
+
+        </div>
+      </div>
     </section>
     <!-- /.sidebar -->
   </aside>
@@ -139,7 +131,7 @@
     <section class="content">
             <div class="row">
                 <div class="col-xs-12">
-                    <div class="box">
+                    <div class="box box-info">
                         <div class="box-header">
                             <h3 class="box-title">Plan your journey</h3>
                             <div class="box-tools">
@@ -220,33 +212,32 @@
                         <!-- /.box-body -->
                     </div>
                     <!-- /.box -->
-                    <div class="box">
-                        <div class="box-header">
-                            <h3 class="box-title">Plan your journey</h3>
-                            <div class="box-tools">
-                            <div class="input-group input-group-sm" style="width: 150px;">
-                            </div>
+                    <div class="row" id="results" style="visibility: hidden">
+                        <div class="col-md-12">
+                            <!-- /.col (LEFT) -->
+                            <div class="box box-info">
+                                <div class="box-header">
+                                <h3 class="box-title">Search Results</h3>
+                                </div>
+                                <!-- /.box-header -->
+                                <div class="box-body">
+                                <table id="example1" class="table table-bordered table-striped">
+                                    <thead>
+                                    <tr>
+                                    <th>Stay between</th>
+                                    <th>Price</th>
+                                    <th>Book the room</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id='table'>
+                                    </tbody>
+                                </table>
+                                </div>
+                                <!-- /.box-body -->
                             </div>
                         </div>
-                        <!-- /.box-header -->
-                        <div class="box-body table-responsive">
-                            <div class="small-box bg-aqua">
-                                <div class="inner">
-                                    <h3>150</h3>
-                    
-                                    <p>New Orders</p>
-                                </div>
-                                <div class="icon">
-                                    <i class="fa fa-shopping-cart"></i>
-                                </div>
-                                <a href="#" class="small-box-footer">
-                                    More info <i class="fa fa-arrow-circle-right"></i>
-                                </a>
-                            </div>
-                        </div>
-                        <!-- /.box-body -->
                     </div>
-                    <!-- /.box -->    
+                    <!-- /.box -->  
                 </div>
             </div>
       </div>
@@ -463,6 +454,9 @@
 <script src="../../bower_components/bootstrap-daterangepicker/daterangepicker.js"></script>  
 <!-- bootstrap datepicker -->
 <script src="../../bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+<!-- DataTables -->
+<script src="../../bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="../../bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
 <!-- page script -->
 <script>
     let currentLocation;
@@ -491,7 +485,7 @@
             contentType: 'application/json',
             data: requestData,
             success: function (data) {
-                console.log(data);
+              updateTable(data);
             }
         });
     };
@@ -503,20 +497,22 @@
         } else {
             postDataData();
         }
+        
+        document.getElementById("results").style.visibility = "visible";
     };
 
     $(function () {
         //Initialize Select2 Elements
-        $('.select2').select2()
-        $('.guest').select2()
-        $('.room').select2()
+        $('.select2').select2();
+        $('.guest').select2();
+        $('.room').select2();
         //Date picker
-        $('#reservation').daterangepicker()
+        $('#reservation').daterangepicker();
         //Flat red color scheme for iCheck
         $('input[type="checkbox"].flat-red, input[type="radio"].flat-red').iCheck({
             checkboxClass: 'icheckbox_flat-green',
-        radioClass   : 'iradio_flat-green'
-        })
+            radioClass   : 'iradio_flat-green'
+        });
     });
     const getLocation = () => {
         if (navigator.geolocation) {
@@ -532,34 +528,28 @@
         };
         postDataData();
     };
-  function updateRisk(status) {
-      $('#risk_status').html(status);
-      let riskClass;
-      let risk;
-      if (status === 'Red') {
-        riskClass = 'text-red';
-        risk = 3;
-      }
-      else if (status === 'Amber') {
-        riskClass = 'text-yellow';
-        risk = 2;
-      }
-      else if (status === 'Green') {
-        riskClass = 'text-green';
-        risk = 1;
-      }
-      $("#risk_status").attr('class', riskClass);
 
-      for(let i = 1; i <= 3; ++i) {
-        if(($(`#state${i}`).html() === 'Red' && risk < 3)
-        || ($(`#state${i}`).html() === 'Amber' && risk < 2)
-        || ($(`#state${i}`).html() === 'Green' && risk < 1)) {
-            $(`#buy${i}`).addClass('disabled');
-        } else {
-            $(`#buy${i}`).removeClass('disabled');
+    const updateTable = (data) => {
+        let htmlText = '';
+        for(let i in data) {
+            htmlText += `<tr><td>${data[i]['period']}</td>`;
+            htmlText += `<td>${data[i]['price']}</td>`;
+            htmlText += `
+                <td><span class="input-group-btn">
+                    <button type="button" id="book" onclick="bookTheRoom(${data[i]['id']})" class="btn btn-flat">
+                        Book the room
+                    </button>
+                </span></td>
+            `;
+            htmlText += `</tr>`;
         }
-      }
-  }
+        $(`#table`).html(htmlText);
+        $('#example1').DataTable();
+    }
+
+    const bookTheRoom = (id) => {
+        console.log(id);
+    }
 </script>
 </body>
 </html>

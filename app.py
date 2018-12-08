@@ -1,4 +1,4 @@
-
+from service import returnFixDate, returnFlexibleDate
 from flask import Flask
 from flask import request
 
@@ -10,7 +10,9 @@ def hello():
 
 @app.route("/query", methods = ['POST'])
 def query():
-    print (request.is_json)
     content = request.get_json()
-    print (content)
-    return 'JSON posted'
+    if content['flexible']:
+        return returnFlexibleDate(content)
+    else:
+        return returnFixDate(content)
+        

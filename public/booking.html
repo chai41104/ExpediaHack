@@ -18,7 +18,7 @@
     <script src="https://checkout.stripe.com/v2/checkout.js"></script>
     <script type="text/javascript">
         var PRICE = 2500;
-
+        const hostname = "http://18.184.64.203";
         function disableForm(){
             $(".form").prop("disabled", true);
         }
@@ -38,13 +38,14 @@
         }
 
         function attemptBook(city, date, days, contactNumber){
+            console.log(hostname+"/v1/requestBooking?city=" + city + "&date=" + date + "&days=" + days + "&contactNumber=" + contactNumber);
             $.ajax({
-                url: "/v1/requestBooking?city=" + city + "&date=" + date + "&days=" + days + "&contactNumber=" + contactNumber
+                url: hostname+"/v1/requestBooking?city=" + city + "&date=" + date + "&days=" + days + "&contactNumber=" + contactNumber
             }).done(function(response){
                 // Pass back response.confirmation with payment proof.
                 var stripeConfirm = function(stripeResponse){
                     $.ajax({
-                        url:"/v1/confirmBooking?confirm=" + response.confirmation + "&pay=" + stripeResponse.id
+                        url: hostname+"/v1/confirmBooking?confirm=" + response.confirmation + "&pay=" + stripeResponse.id
                             + "&price=" + PRICE
                     }).done(function(confirmation){
                         $('#start').fadeOut(function(){
@@ -91,7 +92,7 @@
             $('#city').change(function(){
                 var value = $(this).val();
                 $.ajax({
-                    url: "/v1/canBook?city=" + value
+                    url: hostname+"/v1/canBook?city=" + value
                 }).done(function(response){
                     if (!response.canBook){
                         disableForm();
@@ -108,12 +109,12 @@
                 });
             }).trigger("change");
 
-            // attemptBook(
-            //     'london',
-            //     '08/12/2018',
-            //     '4',
-            //     '07873124771'
-            // );
+            attemptBook(
+                'LONDON',
+                '12/12/2018',
+                '4',
+                '07873124771'
+            );
         })
     </script>
     <style type="text/css" >
@@ -126,7 +127,7 @@
     </style>
 </head>
 <body>
-<div id="start" ><center>
+<div id="start" class="hidden" ><center>
     <h3> Choose a date for your stay, and 48 hours before this date we will confirm your booking with hotel and room number.</h3>
     <p id="problem" class="hidden"></p>
     <label for="city">City: </label>

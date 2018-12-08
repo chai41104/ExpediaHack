@@ -3,7 +3,7 @@ def returnFixDate(content) :
     return json.dumps(
         [{
             'period': content['reservation'],
-            'price': "$39",
+            'price': "$25",
             'id': "11111"
         }]
     )
@@ -12,7 +12,7 @@ def returnFlexibleDate(content) :
     return json.dumps(
         [{
             'period': '11/08/2018 - 11/08/2018',
-            'price': "$39",
+            'price': "$25",
             'id': "11111"
         },{
             'period': '12/08/2018 - 12/08/2018',

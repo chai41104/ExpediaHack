@@ -153,7 +153,8 @@
                                 <div class="form-group">
                                     <label>Your destination</label>
                                     <select id="location" class="form-control select2" style="width: 100%;">
-                                        <option selected="selected">Alabama</option>
+                                        <option selected="selected">Current Location</option>
+                                        <option>Alabama</option>
                                         <option>Alaska</option>
                                         <option>California</option>
                                         <option>Delaware</option>
@@ -464,14 +465,24 @@
 <script src="../../bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
 <!-- page script -->
 <script>
-
-    const searchFunc = () => {
-        const location = $('#location').val();
+    let currentLocation;
+    const getInfo = () => {
         const guest = $('#guest').val();
         const room = $('#room').val();
         const reservation = $('#reservation').val();
         const flexible = $('#flexible')[0].checked;
-        const requestData = JSON.stringify({location, guest, room, reservation, flexible});
+        const requestData = JSON.stringify({
+            location,
+            currentLocation,
+            guest,
+            room,
+            reservation,
+            flexible
+        });
+    };
+
+    const postDataData = () => {
+        const requestData = getInfo();
         $.ajax({
             type: "POST",
             url: '/query',
@@ -480,7 +491,16 @@
             data: requestData,
             success: function (data) {
             }
-        })
+        });
+    };
+
+    const searchFunc = () => {
+        const location = $('#location').val();
+        if (location === 'Current Location') {
+            getLocation();
+        } else {
+            postDataData();
+        }
     };
 
     $(function () {
@@ -496,6 +516,18 @@
         radioClass   : 'iradio_flat-green'
         })
     });
+    const getLocation = () => {
+        if (navigator.geolocation) {
+            console.log('getLocation');
+            navigator.geolocation.watchPosition(showPosition);
+        } else {
+            alert("Geolocation is not supported by this browser.");
+        }
+    }
+    const showPosition = (position) => {
+        currentLocation = position.coords;
+        postDataData();
+    };
   function updateRisk(status) {
       $('#risk_status').html(status);
       let riskClass;

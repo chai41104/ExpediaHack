@@ -467,13 +467,14 @@
 <script>
     let currentLocation;
     const getInfo = () => {
+        const location = $('#location').val();
         const guest = $('#guest').val();
         const room = $('#room').val();
         const reservation = $('#reservation').val();
         const flexible = $('#flexible')[0].checked;
-        const requestData = JSON.stringify({
+        return JSON.stringify({
             location,
-            currentLocation,
+            currentLocation: currentLocation,
             guest,
             room,
             reservation,
@@ -490,6 +491,7 @@
             contentType: 'application/json',
             data: requestData,
             success: function (data) {
+                console.log(data);
             }
         });
     };
@@ -518,14 +520,16 @@
     });
     const getLocation = () => {
         if (navigator.geolocation) {
-            console.log('getLocation');
             navigator.geolocation.watchPosition(showPosition);
         } else {
             alert("Geolocation is not supported by this browser.");
         }
     }
     const showPosition = (position) => {
-        currentLocation = position.coords;
+        currentLocation = {
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude
+        };
         postDataData();
     };
   function updateRisk(status) {
